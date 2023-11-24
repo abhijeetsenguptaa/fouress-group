@@ -5,6 +5,7 @@ async function getUsers() {
         const users = await UserModel.find();
         return ({
             status: true,
+            count: users.length,
             message: 'List of users',
             data: users
         })

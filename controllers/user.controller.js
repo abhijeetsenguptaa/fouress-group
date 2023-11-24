@@ -1,11 +1,25 @@
 const getUsers = require("../services/users/get-users");
-const phoneNumberLogin = require("../services/users/phone-number-register-login");
-const verifyingOTP = require("../services/users/verifying-otp");
+const phoneNumberLoginService = require("../services/users/phone-number-register-login");
+const verifyingOTPService = require("../services/users/verifying-otp");
 
 async function fetchingUsers(req, res) {
     try {
         const users = await getUsers();
-        console.log(users);
+
+        if (users.status) {
+            return res.status(200).json({
+                status: users.status,
+                count: users.count,
+                message: users.message,
+                data: users.data
+            })
+        }
+
+        return res.status(404).json({
+            status: users.status,
+            message: users.message
+        })
+
     } catch (error) {
         return res.status(500).json({
             status: false,
@@ -18,7 +32,7 @@ async function loggingInWithPhone(req, res) {
     try {
         const { phoneNumber } = req.body;
 
-        const phone = await phoneNumberLogin(phoneNumber);
+        const phone = await phoneNumberLoginService(phoneNumber);
 
         if (phone.status) {
             return res.status(200).json({
@@ -43,9 +57,8 @@ async function loggingInWithPhone(req, res) {
 async function otpVerification(req, res) {
     try {
         const { phoneNumber, otp } = req.body;
-        const authOTP = req.headers.otp;
 
-        const verification = await verifyingOTP(phoneNumber, otp, authOTP);
+        const verification = await verifyingOTPService(phoneNumber, otp);
 
         if (verification.status) {
             return res.status(200).json({
