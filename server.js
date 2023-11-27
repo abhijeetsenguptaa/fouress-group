@@ -3,6 +3,8 @@ const express = require('express');
 const cors = require('cors');
 const connection = require('./configs/connection');
 const userRouter = require('./routers/user.routes');
+const categoryRouter = require('./routers/category.routes');
+const bannerRouter = require('./routers/banner.routes');
 
 
 
@@ -26,7 +28,10 @@ app.get('/', async (req, res) => {
     }
 })
 
+app.use('/uploads', express.static('uploads')) // checking the static images.
 app.use('/users', userRouter);
+app.use('/categories', categoryRouter);
+app.use('/banners', bannerRouter);
 
 app.listen(PORT, async () => {
     try {
