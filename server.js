@@ -5,6 +5,7 @@ const connection = require('./configs/connection');
 const userRouter = require('./routers/user.routes');
 const categoryRouter = require('./routers/category.routes');
 const bannerRouter = require('./routers/banner.routes');
+const adminRoute = require('./routers/admin.routes');
 
 
 
@@ -32,6 +33,7 @@ app.use('/uploads', express.static('uploads')) // checking the static images.
 app.use('/users', userRouter);
 app.use('/categories', categoryRouter);
 app.use('/banners', bannerRouter);
+app.use('/admin', adminRoute);
 
 app.listen(PORT, async () => {
     try {

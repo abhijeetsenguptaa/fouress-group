@@ -16,7 +16,10 @@ const upload = multer({ storage: storage });
 async function addCategoryController(req, res) {
     try {
         const { title, slug, icon, status } = req.body;
-        const image = "uploads/category-images/" + req.file.filename;
+        let image;
+        if(req.file){
+            image = "uploads/category-images/" + req.file.filename;
+        }
 
         const categoryInsert = await AddCategoryService(title, slug, icon, status, image);
 
