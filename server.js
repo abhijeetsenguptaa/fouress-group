@@ -6,6 +6,7 @@ const userRouter = require('./routers/user.routes');
 const categoryRouter = require('./routers/category.routes');
 const bannerRouter = require('./routers/banner.routes');
 const adminRoute = require('./routers/admin.routes');
+const subCategoryRouter = require('./routers/sub_category.routes');
 
 
 
@@ -34,6 +35,7 @@ app.use('/users', userRouter);
 app.use('/categories', categoryRouter);
 app.use('/banners', bannerRouter);
 app.use('/admin', adminRoute);
+app.use('/sub-categories', subCategoryRouter);
 
 app.listen(PORT, async () => {
     try {
