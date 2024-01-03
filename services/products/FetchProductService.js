@@ -4,7 +4,7 @@ async function FetchProductService(id, category, sub_category) {
     try {
         const query = {};
         if (id) {
-            query._id = id; // Assuming id is the MongoDB document ID
+            query._id = id; 
         }
         if (category) {
             query.category = category;
@@ -13,7 +13,7 @@ async function FetchProductService(id, category, sub_category) {
             query.sub_category = sub_category;
         }
 
-        // Execute the query and return the result
+        
         const result = await ProductModel.find(query);
 
         if (result.length === 0) {
