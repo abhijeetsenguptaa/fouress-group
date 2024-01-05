@@ -1,8 +1,8 @@
 const BannerModel = require("../../models/banner.model");
 
-async function AddBannerService(header, title, image, category_id, description, link, isActive, startDate, endDate) {
+async function AddBannerService(header, title, image, description, link, isActive, startDate, endDate) {
     try {
-        const bannerCreation = new BannerModel({ header, title, image, category_id, description, link, isActive, startDate, endDate });
+        const bannerCreation = new BannerModel({ header, title, image, description, link, isActive, startDate, endDate });
         await bannerCreation.save();
 
         return {

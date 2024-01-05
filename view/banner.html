@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Banner Posting</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #f4f4f4;
+      }
+
+      .container {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+
+      form {
+        display: flex;
+        flex-direction: column;
+      }
+
+      label {
+        margin-bottom: 8px;
+      }
+
+      input,
+      select,
+      button {
+        margin-bottom: 16px;
+        padding: 8px;
+      }
+
+      button {
+        background-color: #4caf50;
+        color: #fff;
+        cursor: pointer;
+        border: none;
+      }
+
+      button:hover {
+        background-color: #45a049;
+      }
+
+      .error {
+        color: #ff0000;
+      }
+
+      .success {
+        color: #008000;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Banner Posting</h1>
+      <form
+        id="productForm"
+        enctype="multipart/form-data"
+        onsubmit="submitForm(event)"
+      >
+        <label for="header">Header:</label>
+        <input type="text" id="header" name="header" required />
+
+        <label for="title">Title:</label>
+        <input type="text" id="title" name="title" required />
+
+        <label for="description">Description:</label>
+        <textarea id="description" name="description" required></textarea>
+
+        <label for="link">Link:</label>
+        <input type="text" id="link" name="link" required />
+
+        <label for="isActive">Is Active:</label>
+        <select id="isActive" name="isActive" required>
+          <option value="true">Active</option>
+          <option value="false">Inactive</option>
+        </select>
+
+        <label for="startDate">Start Date:</label>
+        <input type="date" id="startDate" name="startDate" required />
+
+        <label for="endDate">End Date:</label>
+        <input type="date" id="endDate" name="endDate" required />
+
+        <label for="bannerImage">Banner Image:</label>
+        <input type="file" id="image" name="image" accept="image/*" />
+
+        <button type="submit" id="buttonClick">Post Banner</button>
+      </form>
+      <div id="result"></div>
+    </div>
+  </body>
+  <script>
+    async function submitForm(event) {
+      event.preventDefault();
+      try {
+        // Create a FormData object to store form data
+        const formData = new FormData(document.getElementById("productForm"));
+        console.log(formData);
+        // Convert FormData to plain object for better readability
+        const formDataObject = {};
+        formData.forEach((value, key) => {
+          formDataObject[key] = value;
+        });
+
+        // Log the FormData object in a more readable format
+        console.log(formDataObject);
+
+        //   Make a POST request to the specified endpoint
+        const response = await fetch("http://13.233.139.58/banners", {
+          method: "POST",
+          body: formData,
+        });
+
+        // Check if the request was successful
+        if (response.ok) {
+          const result = await response.json();
+          console.log(result);
+        } else {
+          // Handle error response
+          console.error("Failed to submit form. Status:", response.status);
+        }
+      } catch (error) {
+        // Handle unexpected errors
+        console.error("Error:", error.message);
+      }
+    }
+  </script>
+</html>

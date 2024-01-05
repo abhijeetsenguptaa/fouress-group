@@ -7,9 +7,9 @@
     <title>File Upload Test</title>
 </head>
 <body>
-    <h1>File Upload Test</h1>
+    <h1>Category Upload</h1>
 
-    <form enctype="multipart/form-data" action="http://localhost:8000/categories" method="post" id="uploadForm">
+    <form enctype="multipart/form-data" action="http://13.233.139.58/categories" method="post" id="uploadForm">
         <label for="title">Title:</label>
         <input type="text" id="title" name="title" required><br>
 
@@ -34,7 +34,7 @@
             const formData = new FormData(form);
 
             try {
-                const response = await fetch("http://localhost:8000/categories", {
+                const response = await fetch("http://13.233.139.58/categories", {
                     method: "POST",
                     body: formData
                 });

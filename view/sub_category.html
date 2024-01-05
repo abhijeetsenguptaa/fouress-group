@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sub-Category</title>
+</head>
+<body>
+    <h1>Sub-Category Upload</h1>
+    <form id="uploadForm" enctype="multipart/form-data">
+        <!-- Dropdown for category_id -->
+        <label for="category_id">Category ID:</label>
+        <select id="category_id" name="category_id" required>
+            <!-- Options will be populated dynamically using JavaScript -->
+        </select>
+
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+
+        <label for="price">Price:</label>
+        <input type="text" id="price" name="price" required>
+
+        <label for="short_description">Short Description:</label>
+        <textarea id="short_description" name="short_description" rows="4" required></textarea>
+
+        <label for="long_description">Long Description:</label>
+        <textarea id="long_description" name="long_description" rows="8" required></textarea>
+
+        <label for="images">Images:</label>
+        <input type="file" id="images" name="images" multiple accept="image/*">
+
+        <button type="button" onclick="uploadFormData()">Submit</button>
+    </form>
+
+    <script>
+        // Fetch categories and populate the dropdown
+        async function fetchCategories() {
+            const response = await fetch("http://13.233.139.58/categories");
+            const categories = await response.json();
+
+            const categoryDropdown = document.getElementById('category_id');
+
+            // Populate dropdown options
+            categories.data.forEach(category => {
+                const option = document.createElement('option');
+                option.value = category._id;
+                option.text = category.title;
+                categoryDropdown.add(option);
+            });
+        }
+
+        // Fetch categories when the page loads
+        fetchCategories();
+
+        // Function to upload form data
+        async function uploadFormData() {
+            const form = document.getElementById('uploadForm');
+            const formData = new FormData(form);
+
+            try {
+                const response = await fetch("http://13.233.139.58/sub-categories", {
+                    method: "POST",
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    console.log("Success:", data);
+                } else {
+                    console.error("Error:", data);
+                }
+            } catch (error) {
+                console.error("Error:", error);
+            }
+        }
+    </script>
+</body>
+</html>

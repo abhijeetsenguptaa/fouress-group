@@ -13,10 +13,6 @@ const bannerSchema = new mongoose.Schema({
         type: String,
         // required: true 
     },
-    category_id: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'categories'
-    },
     description: {
         type: String,
         default: null
