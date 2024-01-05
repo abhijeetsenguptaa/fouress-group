@@ -1,3 +1,4 @@
+const Sub_Category_Model = require("../models/sub_category.model");
 const FetchSubCategoryService = require("../services/sub-categories/FetchSubCategoryService");
 const multer = require("multer");
 
