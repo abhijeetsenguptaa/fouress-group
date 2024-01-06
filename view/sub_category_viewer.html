@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css" />
+    <title>Virtual Screen</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        #app {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid #ddd;
+        }
+
+        th,
+        td {
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <div id="app"></div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", async function () {
+            const response = await fetch("http://13.233.139.58/sub-categories");
+            const data = await response.json();
+
+            const appContainer = document.getElementById("app");
+            appContainer.innerHTML = renderData(data.data);
+        });
+
+        
+        function renderData(data) {
+    return data.map((subcategory) => {
+        const {
+            _id,
+            category_id,
+            logo,
+            name,
+            price,
+            images,
+            short_description,
+            long_description,
+        } = subcategory;
+
+        return `
+            <div>
+                <h1>${name}</h1>
+                <img src="http://13.233.139.58/${logo}" alt="${name}" style="max-width: 100%; height: auto;">
+                <p><strong>Price:</strong> ${price}</p>
+                <p><strong>Category ID:</strong> ${category_id}</p>
+                <h2>Images:</h2>
+                <ul>
+                    ${images
+                        .map((image) => `<li><img src="http://13.233.139.58/${image}" alt="${name}"></li>`)
+                        .join("")}
+                </ul>
+                <h2>Short Description:</h2>
+                <div>${short_description}</div>
+                <h2>Long Description:</h2>
+                <div>${long_description}</div>
+            </div>
+        `;
+    }).join("");
+}
+    </script>
+</body>
+</html>

@@ -1,4 +1,5 @@
 const Sub_Category_Model = require("../models/sub_category.model");
+const DeleteSubCategoryService = require("../services/sub-categories/DeleteSubCategoryService");
 const FetchSubCategoryService = require("../services/sub-categories/FetchSubCategoryService");
 const multer = require("multer");
 
@@ -80,6 +81,37 @@ async function postSubCategoryController(req, res) {
     }
 }
 
+async function updateSubCategoryController(req,res){
+    try {
+        
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            status: false,
+            message: "Internal Server Error"
+        });
+    }
+}
 
 
-module.exports = { upload, postSubCategoryController, fetchSubCategoryController }
+async function DeleteSubCategoryController(req, res) {
+    try {
+        const id = req.params.id;
+
+        const dataRequired = await DeleteSubCategoryService(id);
+
+        return res.status(dataRequired.status ? 200 : 404).json({
+            status: dataRequired.status,
+            message: dataRequired.message
+        })
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            status: false,
+            message: "Internal Server Error"
+        });
+    }
+}
+
+
+module.exports = { upload, postSubCategoryController, fetchSubCategoryController, updateSubCategoryController,DeleteSubCategoryController };

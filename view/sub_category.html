@@ -4,6 +4,49 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sub-Category</title>
+    <script src="https://cdn.tiny.cloud/1/st8j8u5tagg2oo74434fd1vx3v8fvf76nlecsozw5e2293nr/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        form {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
 </head>
 <body>
     <h1>Sub-Category Upload</h1>
@@ -20,19 +63,26 @@
         <label for="price">Price:</label>
         <input type="text" id="price" name="price" required>
 
-        <label for="short_description">Short Description:</label>
-        <textarea id="short_description" name="short_description" rows="4" required></textarea>
+        <label for="description">Short Description (Rich Text):</label>
+        <textarea id="description" name="description" rows="4"></textarea>
 
-        <label for="long_description">Long Description:</label>
-        <textarea id="long_description" name="long_description" rows="8" required></textarea>
 
-        <label for="images">Images:</label>
+        <label for="images">Images: (Multiple images upto 5)</label>
         <input type="file" id="images" name="images" multiple accept="image/*">
 
         <button type="button" onclick="uploadFormData()">Submit</button>
     </form>
 
     <script>
+        // Initialize TinyMCE
+        tinymce.init({
+            selector: 'textarea',
+            height: 300,
+            plugins: 'table lists',
+            toolbar: 'undo redo | formatselect | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | table',
+            content_style: "table { border-collapse: collapse; width: 100%; } th, td { border: 1px solid #ddd; padding: 8px; text-align: left; } th { background-color: #4CAF50; color: white; } tr:first-child { background-color: #2196F3; color: white; }"
+        });
+
         // Fetch categories and populate the dropdown
         async function fetchCategories() {
             const response = await fetch("http://13.233.139.58/categories");
@@ -55,6 +105,11 @@
         // Function to upload form data
         async function uploadFormData() {
             const form = document.getElementById('uploadForm');
+            
+            // Get the content from TinyMCE editors and set it in the corresponding textareas
+            const shortDescriptionEditor = tinymce.get('description');
+            form.elements['description'].value = shortDescriptionEditor.getContent();
+
             const formData = new FormData(form);
 
             try {
