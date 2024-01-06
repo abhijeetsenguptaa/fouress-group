@@ -49,8 +49,7 @@ async function postSubCategoryController(req, res) {
             category_id,
             name,
             price,
-            short_description,
-            long_description
+            description
         } = req.body;
 
         // Create a new sub-category instance
@@ -60,8 +59,7 @@ async function postSubCategoryController(req, res) {
             name,
             price,
             images,
-            short_description,
-            long_description
+            description
         });
 
         // Save the sub-category to the database

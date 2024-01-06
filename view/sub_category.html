@@ -63,11 +63,8 @@
         <label for="price">Price:</label>
         <input type="text" id="price" name="price" required>
 
-        <label for="short_description">Short Description (Rich Text):</label>
-        <textarea id="short_description" name="short_description" rows="4"></textarea>
-
-        <label for="long_description">Long Description (Rich Text):</label>
-        <textarea id="long_description" name="long_description" rows="8"></textarea>
+        <label for="description">Short Description (Rich Text):</label>
+        <textarea id="description" name="description" rows="4"></textarea>
 
         <label for="images">Images: (Multiple images upto 5)</label>
         <input type="file" id="images" name="images" multiple accept="image/*">
@@ -108,11 +105,8 @@
             const form = document.getElementById('uploadForm');
             
             // Get the content from TinyMCE editors and set it in the corresponding textareas
-            const shortDescriptionEditor = tinymce.get('short_description');
-            form.elements['short_description'].value = shortDescriptionEditor.getContent();
-
-            const longDescriptionEditor = tinymce.get('long_description');
-            form.elements['long_description'].value = longDescriptionEditor.getContent();
+            const shortDescriptionEditor = tinymce.get('description');
+            form.elements['description'].value = shortDescriptionEditor.getContent();
 
             const formData = new FormData(form);
 
