@@ -21,7 +21,11 @@ const subCategorySchema = new mongoose.Schema({
         type: [String], 
         default: []
     },
-    description: {
+    short_description: {
+        type: String,
+        default: null
+    },
+    long_description: {
         type: String,
         default: null
     }
