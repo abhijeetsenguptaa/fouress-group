@@ -4,13 +4,14 @@ async function FetchSubCategoryService(id, category) {
     try {
         let subCategoryData;
 
+        const query = {};
         if (id) {
-            subCategoryData = await Sub_Category_Model.findById(id);
+            query._id = id;
         } else if (category) {
-            subCategoryData = await Sub_Category_Model.find({ category_id: category });
-        } else {
-            subCategoryData = await Sub_Category_Model.find();
+            query.category_id = category;
         }
+
+        subCategoryData = await Sub_Category_Model.find(query).populate('category_id');
 
         const count = subCategoryData.length;
 
