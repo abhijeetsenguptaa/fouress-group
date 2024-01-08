@@ -66,8 +66,7 @@
             name,
             price,
             images,
-            short_description,
-            long_description,
+            description
         } = subcategory;
 
         return `
@@ -83,9 +82,7 @@
                         .join("")}
                 </ul>
                 <h2>Short Description:</h2>
-                <div>${short_description}</div>
-                <h2>Long Description:</h2>
-                <div>${long_description}</div>
+                <div>${description}</div>
             </div>
         `;
     }).join("");

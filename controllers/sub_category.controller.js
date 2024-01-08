@@ -92,16 +92,43 @@ async function updateSubCategoryController(req,res){
 }
 
 
+const fs = require('fs').promises; // Import the file system module
+
 async function DeleteSubCategoryController(req, res) {
     try {
         const id = req.params.id;
 
+        // Fetch subcategory data including the images field
+        const subCategoryData = await Sub_Category_Model.findById(id);
+
+        if (!subCategoryData) {
+            return res.status(404).json({
+                status: false,
+                message: "Subcategory not found"
+            });
+        }
+
+        // Extract image paths from the subcategory data
+        const imagePaths = subCategoryData.images || [];
+
+        // Delete images from the file system
+        await Promise.all(imagePaths.map(async (imagePath) => {
+            try {
+                console.log(imagePath);
+                await fs.unlink(imagePath); // Delete the image file
+                console.log(`Image deleted: ${imagePath}`);
+            } catch (error) {
+                console.error(`Error deleting image: ${imagePath}`, error);
+            }
+        }));
+
+        // Delete the subcategory data
         const dataRequired = await DeleteSubCategoryService(id);
 
         return res.status(dataRequired.status ? 200 : 404).json({
             status: dataRequired.status,
             message: dataRequired.message
-        })
+        });
     } catch (error) {
         console.error(error);
         return res.status(500).json({
