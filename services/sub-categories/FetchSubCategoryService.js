@@ -5,12 +5,17 @@ async function FetchSubCategoryService(id, category, wishlist) {
         let subCategoryData;
 
         const query = {};
+
         if (id) {
             query._id = id;
-        } else if (category) {
+        }
+
+        if (category) {
             query.category_id = category;
-        } else if (wishlist) {
-            query.wishlist = wishlist;
+        }
+
+        if (wishlist !== undefined) {
+            query.wishlists = wishlist;
         }
 
         subCategoryData = await Sub_Category_Model.find(query).populate('category_id');
