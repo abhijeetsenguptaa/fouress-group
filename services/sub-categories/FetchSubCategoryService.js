@@ -1,6 +1,6 @@
 const Sub_Category_Model = require("../../models/sub_category.model");
 
-async function FetchSubCategoryService(id, category) {
+async function FetchSubCategoryService(id, category, wishlist) {
     try {
         let subCategoryData;
 
@@ -9,6 +9,8 @@ async function FetchSubCategoryService(id, category) {
             query._id = id;
         } else if (category) {
             query.category_id = category;
+        } else if (wishlist) {
+            query.wishlist = wishlist;
         }
 
         subCategoryData = await Sub_Category_Model.find(query).populate('category_id');

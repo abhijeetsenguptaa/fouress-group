@@ -24,6 +24,10 @@ const subCategorySchema = new mongoose.Schema({
     description: {
         type: String,
         default: null
+    },
+    wishlists : {
+        type : Boolean,
+        default: false
     }
 }, {
     versionKey: false

@@ -1,6 +1,7 @@
 const multer = require("multer");
 const AddCategoryService = require("../services/categories/AddCategoryService");
 const FetchCategoryService = require("../services/categories/FetchCategoryService");
+const DeleteCategoryService = require("../services/categories/DeleteCategoryService");
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -17,7 +18,7 @@ async function addCategoryController(req, res) {
     try {
         const { title, slug, icon, status } = req.body;
         let image;
-        if(req.file){
+        if (req.file) {
             image = "uploads/category-images/" + req.file.filename;
         }
 
@@ -60,5 +61,24 @@ async function fetchCategoryController(req, res) {
     }
 }
 
+async function deleteCategoryController(req, res) {
+    try {
+        const id = req.params.id;
 
-module.exports = { upload, addCategoryController, fetchCategoryController }
+        const requiredCategoryItem = await DeleteCategoryService(id);
+
+        return res.status(requiredCategoryItem.status ? 200 : 404).json({
+            status: requiredCategoryItem.status,
+            message: requiredCategoryItem.message,
+            data: requiredCategoryItem.status ? requiredCategoryItem.data : null
+        })
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            status: false,
+            message: "Internal Server Error"
+        });
+    }
+}
+
+module.exports = { upload, addCategoryController, fetchCategoryController, deleteCategoryController };

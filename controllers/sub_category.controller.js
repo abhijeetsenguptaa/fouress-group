@@ -1,4 +1,5 @@
 const Sub_Category_Model = require("../models/sub_category.model");
+const AddToWishlistService = require("../services/sub-categories/AddToWishlistService");
 const DeleteSubCategoryService = require("../services/sub-categories/DeleteSubCategoryService");
 const FetchSubCategoryService = require("../services/sub-categories/FetchSubCategoryService");
 const multer = require("multer");
@@ -6,9 +7,9 @@ const multer = require("multer");
 
 async function fetchSubCategoryController(req, res) {
     try {
-        const { id, category } = req.query;
+        const { id, category, wishlist } = req.query;
 
-        const subCategoryData = await FetchSubCategoryService(id, category);
+        const subCategoryData = await FetchSubCategoryService(id, category, wishlist);
 
         return res.status(subCategoryData.status ? 200 : 404).json({
             status: subCategoryData.status,
@@ -49,17 +50,19 @@ async function postSubCategoryController(req, res) {
             category_id,
             name,
             price,
-            description
+            description,
+            wishlists
         } = req.body;
 
         // Create a new sub-category instance
         const newSubCategory = new Sub_Category_Model({
             category_id,
-            logo: images.length > 0 ? images[0] : null, 
+            logo: images.length > 0 ? images[0] : null,
             name,
             price,
             images,
-            description
+            description,
+            wishlists
         });
 
         // Save the sub-category to the database
@@ -79,9 +82,61 @@ async function postSubCategoryController(req, res) {
     }
 }
 
-async function updateSubCategoryController(req,res){
+async function updateSubCategoryController(req, res) {
     try {
-        
+        const id = req.params.id;
+
+        // Fetch the existing sub-category data
+        const fetchItem = await Sub_Category_Model.findById(id);
+
+        if (!fetchItem) {
+            return res.status(404).json({
+                status: false,
+                message: "Sub-category not found"
+            });
+        }
+
+        // Handle uploaded images
+        let newImages = [];
+        if (req.files) {
+            newImages = req.files.map(file => file.path);
+        }
+
+        // Remove old images that are not present in the newImages array
+        const imagesToDelete = fetchItem.images.filter(oldImage => !newImages.includes(oldImage));
+
+        // Delete old images from the directory
+        imagesToDelete.forEach(async (imagePath) => {
+            try {
+                await fs.promises.unlink(imagePath);
+            } catch (error) {
+                console.error(`Error deleting image: ${imagePath}`, error);
+            }
+        });
+
+        // Update sub-category data
+        const {
+            category_id,
+            name,
+            price,
+            description
+        } = req.body;
+
+        fetchItem.category_id = category_id;
+        fetchItem.logo = newImages.length > 0 ? newImages[0] : null;
+        fetchItem.name = name;
+        fetchItem.price = price;
+        fetchItem.images = newImages;
+        fetchItem.description = description;
+
+        // Save the updated sub-category to the database
+        const updatedSubCategory = await fetchItem.save();
+
+        return res.status(200).json({
+            status: true,
+            message: "Sub-category updated successfully",
+            data: updatedSubCategory
+        });
     } catch (error) {
         console.error(error);
         return res.status(500).json({
@@ -90,6 +145,7 @@ async function updateSubCategoryController(req,res){
         });
     }
 }
+
 
 
 const fs = require('fs').promises; // Import the file system module
@@ -138,5 +194,24 @@ async function DeleteSubCategoryController(req, res) {
     }
 }
 
+async function addToWishlistController(req,res){
+    try {
+        const id = req.params.id;
 
-module.exports = { upload, postSubCategoryController, fetchSubCategoryController, updateSubCategoryController,DeleteSubCategoryController };
+        const dataFromWishlist = await AddToWishlistService(id);
+
+        return res.status(dataFromWishlist.status ? 200 : 404).json({
+            status : dataFromWishlist.status,
+            message : dataFromWishlist.message
+        })
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            status: false,
+            message: "Internal Server Error"
+        });
+    }
+}
+
+
+module.exports = { upload, postSubCategoryController, fetchSubCategoryController, updateSubCategoryController, DeleteSubCategoryController, addToWishlistController };
