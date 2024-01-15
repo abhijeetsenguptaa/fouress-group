@@ -13,7 +13,7 @@ async function phoneNumberLoginService(phoneNumber) {
 
         const isUser = await UserModel.findOne({ phoneNumber });
 
-        const otp = "000000";
+        const otp = generateOTP();
         const hashOTP = await bcrypt.hash(otp, 6);
 
         const otpNumberAvailable = await OtpModel.findOne({ phoneNumber });

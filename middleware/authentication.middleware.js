@@ -15,27 +15,30 @@ async function authentication(req, res, next) {
 
         const token = authHeader.split(' ')[1];
 
-        jwt.verify(token, process.env.JWT_SECRET, async (err, decode) => {
-            if (err) {
+        jwt.verify(token, process.env.SECRET_KEY, async (err, decode) => {
+            if (decode) {
+                req.userID = decode.userID;
+
+                const user = await UserModel.findOne({ _id: req.userID });
+
+                if (!user) {
+                    return res.status(404).json({
+                        status: 404,
+                        message: "User not found"
+                    });
+                }
+
+                req.user = user;
+                next();
+
+            } else {
                 return res.status(401).json({
                     status: 401,
                     message: "Invalid Token"
                 });
             }
 
-            req.userID = decode.userID;
 
-            const user = await UserModel.findOne({ _id: req.userID });
-
-            if (!user) {
-                return res.status(404).json({
-                    status: 404,
-                    message: "User not found"
-                });
-            }
-
-            req.user = user;
-            next();
         });
     } catch (error) {
         console.error(error);

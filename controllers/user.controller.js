@@ -1,5 +1,6 @@
 const getUsers = require("../services/users/get-users");
 const phoneNumberLoginService = require("../services/users/phone-number-register-login");
+const PostUsers = require("../services/users/post-users");
 const verifyingOTPService = require("../services/users/verifying-otp");
 
 async function fetchingUsers(req, res) {
@@ -80,4 +81,23 @@ async function otpVerification(req, res) {
     }
 }
 
-module.exports = { fetchingUsers, loggingInWithPhone, otpVerification }
+async function fillNameAndEmail(req, res) {
+    try {
+        const id = req.userID;
+        const { name, email } = req.body;
+
+        const fillNameAndEmail = await PostUsers(id,name,email);
+
+        return res.status(fillNameAndEmail.status? 200: 404).json({
+            status: fillNameAndEmail.status,
+            message: fillNameAndEmail.message
+        })
+    } catch (error) {
+        return res.status(500).json({
+            status: false,
+            error: 'Internal server error.',
+        });
+    }
+}
+
+module.exports = { fetchingUsers, loggingInWithPhone, otpVerification, fillNameAndEmail }
