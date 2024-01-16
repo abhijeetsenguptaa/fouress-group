@@ -1,6 +1,7 @@
 const getUsers = require("../services/users/get-users");
 const phoneNumberLoginService = require("../services/users/phone-number-register-login");
 const PostUsers = require("../services/users/post-users");
+const SpecificUserService = require("../services/users/specificUserService");
 const verifyingOTPService = require("../services/users/verifying-otp");
 
 async function fetchingUsers(req, res) {
@@ -86,9 +87,9 @@ async function fillNameAndEmail(req, res) {
         const id = req.userID;
         const { name, email, pincode } = req.body;
 
-        const fillNameAndEmail = await PostUsers(id,name,email,pincode);
+        const fillNameAndEmail = await PostUsers(id, name, email, pincode);
 
-        return res.status(fillNameAndEmail.status? 200: 404).json({
+        return res.status(fillNameAndEmail.status ? 200 : 404).json({
             status: fillNameAndEmail.status,
             message: fillNameAndEmail.message
         })
@@ -100,4 +101,23 @@ async function fillNameAndEmail(req, res) {
     }
 }
 
-module.exports = { fetchingUsers, loggingInWithPhone, otpVerification, fillNameAndEmail }
+async function specificUserController(req, res) {
+    try {
+        const id = req.userID;
+        const user = await SpecificUserService(id);
+
+        return res.status(user.status ? 200 : 404).json({
+            status: user.status,
+            message: user.message,
+            data: user.status ? user.data : null
+        })
+    } catch (error) {
+        console.error(error.message);
+        return {
+            status: false,
+            message: error.message
+        };
+    }
+}
+
+module.exports = { fetchingUsers, loggingInWithPhone, otpVerification, fillNameAndEmail, specificUserController };
