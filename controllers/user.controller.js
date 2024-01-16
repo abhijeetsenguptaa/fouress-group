@@ -84,9 +84,9 @@ async function otpVerification(req, res) {
 async function fillNameAndEmail(req, res) {
     try {
         const id = req.userID;
-        const { name, email } = req.body;
+        const { name, email, pincode } = req.body;
 
-        const fillNameAndEmail = await PostUsers(id,name,email);
+        const fillNameAndEmail = await PostUsers(id,name,email,pincode);
 
         return res.status(fillNameAndEmail.status? 200: 404).json({
             status: fillNameAndEmail.status,
