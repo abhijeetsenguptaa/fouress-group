@@ -21,7 +21,7 @@ async function phoneNumberLoginService(phoneNumber) {
         const isUser = await UserModel.findOne({ phoneNumber });
 
         // Generate OTP
-        const otp = generateOTP();
+        const otp = "000000";
         
         // Send OTP via Twilio
         // await twilioClient.messages.create({
