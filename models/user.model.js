@@ -5,6 +5,18 @@ const userSchema = new mongoose.Schema({
         type: String,
         default: null
     },
+    companyName: {
+        type: String,
+        default: null
+    },
+    ceoName:{
+        type: String,
+        default: null
+    },
+    websiteName: {
+        type: String,
+        default: null
+    },
     email: {
         type: String,
         default: null
@@ -25,9 +37,31 @@ const userSchema = new mongoose.Schema({
         type: String,
         default: null
     },
+    city: {
+
+    },
+    state: {
+
+    },
     address: {
         type: String,
         default: null
+    },
+    alternateNumber: {
+        type: String,
+        default: null
+    },
+    alternateEmail:{
+        type: String,
+        default: null
+    },
+    alternateEmailVerified:{
+        type: Boolean,
+        default: false
+    },
+    alternateNumberVerified:{
+        type: Boolean,
+        default: false
     },
     GSTIN: {
         type: String,
@@ -48,7 +82,8 @@ const userSchema = new mongoose.Schema({
     dgftCode: {
         type: String,
         default: null
-    }
+    },
+
 }, {
     versionKey: false
 });

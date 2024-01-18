@@ -8,6 +8,7 @@ const bannerRouter = require('./routers/banner.routes');
 const adminRoute = require('./routers/admin.routes');
 const subCategoryRouter = require('./routers/sub_category.routes');
 const productRoute = require('./routers/product.routes');
+const countryRoute = require('./routers/country.routes');
 
 
 
@@ -37,6 +38,7 @@ app.use('/banners', bannerRouter);
 app.use('/admin', adminRoute);
 app.use('/sub-categories', subCategoryRouter);
 app.use('/products', productRoute);
+app.use('/country', countryRoute);
 
 app.listen(PORT, async () => {
     try {
