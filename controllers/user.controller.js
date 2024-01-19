@@ -1,3 +1,4 @@
+const EditUserDetailService = require("../services/users/EditUserDetailService");
 const getUsers = require("../services/users/get-users");
 const phoneNumberLoginService = require("../services/users/phone-number-register-login");
 const PostUsers = require("../services/users/post-users");
@@ -120,4 +121,23 @@ async function specificUserController(req, res) {
     }
 }
 
-module.exports = { fetchingUsers, loggingInWithPhone, otpVerification, fillNameAndEmail, specificUserController };
+async function editUserDetailsController(req, res) {
+    try {
+        const id = req.params.id;
+
+        const { name, companyName, ceoName, websiteName, email, phoneNumber, password, pincode, city, state, address, alternateNumber, alternateEmail, GSTIN, cin, tan, pan, dgftCode } = req.body;
+
+        const editedData = await EditUserDetailService(id, name, companyName, ceoName, websiteName, email, phoneNumber, password, pincode, city, state, address, alternateNumber, alternateEmail, GSTIN, cin, tan, pan, dgftCode
+        );
+
+        return res.status(editedData.status ? 200 : 404).json({
+            status: editedData.status,
+            message: editedData.message,
+            data: editedData.status ? editedData.data : null
+        })
+    } catch (error) {
+
+    }
+}
+
+module.exports = { fetchingUsers, loggingInWithPhone, otpVerification, fillNameAndEmail, specificUserController, editUserDetailsController };

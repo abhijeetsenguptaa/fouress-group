@@ -38,10 +38,12 @@ const userSchema = new mongoose.Schema({
         default: null
     },
     city: {
-
+        type: String,
+        default: null
     },
     state: {
-
+        type: String,
+        default: null
     },
     address: {
         type: String,
