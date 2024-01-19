@@ -9,6 +9,8 @@ const adminRoute = require('./routers/admin.routes');
 const subCategoryRouter = require('./routers/sub_category.routes');
 const productRoute = require('./routers/product.routes');
 const countryRoute = require('./routers/country.routes');
+const stateRoute = require('./routers/state.routes');
+const cityRoute = require('./routers/city.routes');
 
 
 
@@ -39,6 +41,8 @@ app.use('/admin', adminRoute);
 app.use('/sub-categories', subCategoryRouter);
 app.use('/products', productRoute);
 app.use('/country', countryRoute);
+app.use('/state', stateRoute);
+app.use('/city', cityRoute);
 
 app.listen(PORT, async () => {
     try {
