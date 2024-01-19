@@ -123,7 +123,7 @@ async function specificUserController(req, res) {
 
 async function editUserDetailsController(req, res) {
     try {
-        const id = req.params.id;
+        const id = req.userID;
 
         const { name, companyName, ceoName, websiteName, email, phoneNumber, password, pincode, city, state, address, alternateNumber, alternateEmail, GSTIN, cin, tan, pan, dgftCode } = req.body;
 
