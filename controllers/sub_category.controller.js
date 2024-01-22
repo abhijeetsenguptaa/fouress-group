@@ -1,5 +1,6 @@
 const Sub_Category_Model = require("../models/sub_category.model");
 const AddToWishlistService = require("../services/sub-categories/AddToWishlistService");
+const AlsoDealsInService = require("../services/sub-categories/AlsoDealsInService");
 const DeleteSubCategoryService = require("../services/sub-categories/DeleteSubCategoryService");
 const FetchSubCategoryService = require("../services/sub-categories/FetchSubCategoryService");
 const multer = require("multer");
@@ -194,15 +195,36 @@ async function DeleteSubCategoryController(req, res) {
     }
 }
 
-async function addToWishlistController(req,res){
+async function addToWishlistController(req, res) {
     try {
         const id = req.params.id;
 
         const dataFromWishlist = await AddToWishlistService(id);
 
         return res.status(dataFromWishlist.status ? 200 : 404).json({
-            status : dataFromWishlist.status,
-            message : dataFromWishlist.message
+            status: dataFromWishlist.status,
+            message: dataFromWishlist.message
+        })
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            status: false,
+            message: "Internal Server Error"
+        });
+    }
+}
+
+async function relatedItemsController(req, res) {
+    try {
+        const id = req.params.id;
+
+        const requiredData = await AlsoDealsInService(id);
+
+        return res.status(requiredData.status ? 200 : 404).json({
+            status: requiredData.status,
+            message: requiredData.message,
+            data: requiredData.status ? requiredData.data : null,
+            relatedItem: requiredData.status ? requiredData.relatedItem : null
         })
     } catch (error) {
         console.error(error);
@@ -214,4 +236,4 @@ async function addToWishlistController(req,res){
 }
 
 
-module.exports = { upload, postSubCategoryController, fetchSubCategoryController, updateSubCategoryController, DeleteSubCategoryController, addToWishlistController };
+module.exports = { upload, postSubCategoryController, fetchSubCategoryController, updateSubCategoryController, DeleteSubCategoryController, addToWishlistController, relatedItemsController };
