@@ -11,6 +11,8 @@ const productRoute = require('./routers/product.routes');
 const countryRoute = require('./routers/country.routes');
 const stateRoute = require('./routers/state.routes');
 const cityRoute = require('./routers/city.routes');
+const CategoryModel = require('./models/category.model');
+const Sub_Category_Model = require('./models/sub_category.model');
 
 
 
@@ -21,17 +23,30 @@ app.use(cors());
 
 app.get('/', async (req, res) => {
     try {
+        const categories = await CategoryModel.find();
+        
+        // Fetch subcategories for each category
+        const categoriesWithSubcategories = await Promise.all(categories.map(async (category) => {
+            const subcategories = await Sub_Category_Model.find({ category_id: category._id });  // Replace 'SubCategoryModel' with the actual model for subcategories
+            return {
+                _id: category._id,
+                name: category.title,
+                subcategories: subcategories
+            };
+        }));
+
         return res.status(200).json({
             status: true,
-            message: 'Welcome to Fouress-Group.'
-        })
+            message: 'Welcome to Fouress-Group.',
+            data: categoriesWithSubcategories
+        });
     } catch (error) {
         return res.status(500).json({
             status: false,
             message: error.message
-        })
+        });
     }
-})
+});
 
 app.use('/uploads', express.static('uploads')) // checking the static images.
 app.use('/users', userRouter);
