@@ -13,6 +13,7 @@ const stateRoute = require('./routers/state.routes');
 const cityRoute = require('./routers/city.routes');
 const CategoryModel = require('./models/category.model');
 const Sub_Category_Model = require('./models/sub_category.model');
+const enquireRoute = require('./routers/enquiry.routes');
 
 
 
@@ -31,6 +32,7 @@ app.get('/', async (req, res) => {
             return {
                 _id: category._id,
                 name: category.title,
+                count: subcategories.length,
                 subcategories: subcategories
             };
         }));
@@ -38,6 +40,7 @@ app.get('/', async (req, res) => {
         return res.status(200).json({
             status: true,
             message: 'Welcome to Fouress-Group.',
+            count: categoriesWithSubcategories.length,
             data: categoriesWithSubcategories
         });
     } catch (error) {
@@ -58,6 +61,7 @@ app.use('/products', productRoute);
 app.use('/country', countryRoute);
 app.use('/state', stateRoute);
 app.use('/city', cityRoute);
+app.use('/enquiry', enquireRoute);
 
 app.listen(PORT, async () => {
     try {

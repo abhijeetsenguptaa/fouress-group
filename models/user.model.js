@@ -33,6 +33,11 @@ const userSchema = new mongoose.Schema({
         type: String,
         default: null
     },
+    role: {
+        type: String,
+        enum: ['admin', 'customer'],
+        default: 'customer'
+    },
     pincode: {
         type: String,
         default: null

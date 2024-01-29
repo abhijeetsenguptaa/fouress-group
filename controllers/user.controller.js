@@ -33,9 +33,9 @@ async function fetchingUsers(req, res) {
 
 async function loggingInWithPhone(req, res) {
     try {
-        const { phoneNumber } = req.body;
+        const { phoneNumber, role } = req.body;
 
-        const phone = await phoneNumberLoginService(phoneNumber);
+        const phone = await phoneNumberLoginService(phoneNumber, role);
 
         if (phone.status) {
             return res.status(200).json({

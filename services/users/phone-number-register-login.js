@@ -10,7 +10,7 @@ const accountSid = process.env.ACCOUNT_SID;
 const authToken = process.env.AUTH_TOKEN;
 const twilioClient = twilio(accountSid, authToken);
 
-async function phoneNumberLoginService(phoneNumber) {
+async function phoneNumberLoginService(phoneNumber, role) {
     try {
         // Validate phone number (must be exactly 10 digits)
         if (!isValidPhoneNumber(phoneNumber)) {
@@ -21,8 +21,25 @@ async function phoneNumberLoginService(phoneNumber) {
         const isUser = await UserModel.findOne({ phoneNumber });
 
         // Generate OTP
-        const otp = "000000";  /*generateOTP()*/
-        
+        const otp = generateOTP();
+
+        // const fetch = require('node-fetch');
+
+        // const url = `https://wati_api_endpoint/api/v1/sendTemplateMessage?whatsappNumber=${phoneNumber}`;
+        // const options = {
+        //     method: 'POST',
+        //     headers: { 'content-type': 'text/json' },
+        //     body: JSON.stringify({
+        //         broadcast_name: 'fouress_group',
+        //         parameters: [{ name: 'otp', value: otp }],
+        //         template_name: 'otp_sender'
+        //     })
+        // };
+
+        // fetch(url, options)
+        //     .then(res => res.json())
+        //     .then(json => console.log(json))
+        //     .catch(err => console.error('error:' + err));
         // Send OTP via Twilio
         // await twilioClient.messages.create({
         //     from: '+13237035099',
@@ -52,7 +69,7 @@ async function phoneNumberLoginService(phoneNumber) {
         }
 
         // If the user doesn't exist, create a new user
-        const newUser = new UserModel({ phoneNumber: phoneNumber });
+        const newUser = new UserModel({ phoneNumber: phoneNumber, role });
         await newUser.save();
 
         return {
