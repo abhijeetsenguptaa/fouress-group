@@ -16,7 +16,7 @@ async function AlsoDealsInService(id) {
         return {
             status: true,
             message: "List of the related items",
-            data: requiredItem,
+            // data: requiredItem,
             relatedItem : relatedItems
         };
     } catch (error) {
