@@ -18,7 +18,8 @@ const enquirySchema = new mongoose.Schema(
             default: 'pending'
         },
         message: {
-            type: String
+            type: String,
+            default: null
         },
         quantity: {
             type: String,
