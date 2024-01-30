@@ -21,8 +21,8 @@ const enquirySchema = new mongoose.Schema(
             type: String
         },
         quantity: {
-            type: Number,
-            default: 1
+            type: String,
+            default: null
         },
         enquireDate: {
             type: Date,

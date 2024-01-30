@@ -23,6 +23,29 @@ async function phoneNumberLoginService(phoneNumber, role) {
         // Generate OTP
         const otp = generateOTP();
 
+        const fetch = require('node-fetch');
+
+        const url = 'https://api.brevo.com/v3/transactionalSMS/sms';
+        const options = {
+            method: 'POST',
+            headers: {
+                accept: 'application/json',
+                'content-type': 'application/json',
+                'api-key': process.env.brevo_api_key
+            },
+            body: JSON.stringify({
+                type: 'transactional',
+                unicodeEnabled: false,
+                sender: 'FOUR',
+                recipient: '7079680008',
+                content: `Your otp is login is ${otp}.`
+            })
+        };
+
+        fetch(url, options)
+            .then(res => res.json())
+            .then(json => console.log(json))
+            .catch(err => console.error('error:' + err));
         // const fetch = require('node-fetch');
 
         // const url = `https://wati_api_endpoint/api/v1/sendTemplateMessage?whatsappNumber=${phoneNumber}`;
