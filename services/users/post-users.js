@@ -24,6 +24,7 @@ async function PostUsers(id, name, email, pincode, emailOtp) {
             // Update the user with the provided name, email, and pincode
             user.name = name;
             user.email = email;
+            user.isVerified = true;
             user.pincode = pincode;
 
             // Save the updated user
