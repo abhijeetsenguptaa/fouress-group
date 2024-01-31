@@ -3,7 +3,8 @@ const mongoose = require('mongoose');
 
 const otpSchema = new mongoose.Schema({
     phoneNumber: String,
-    otp: String
+    otp: String,
+    emailOTP: String,
 }, {
     versionKey: false
 })

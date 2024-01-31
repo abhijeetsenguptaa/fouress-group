@@ -4,6 +4,7 @@ const phoneNumberLoginService = require("../services/users/phone-number-register
 const PostUsers = require("../services/users/post-users");
 const SpecificUserService = require("../services/users/specificUserService");
 const verifyingOTPService = require("../services/users/verifying-otp");
+const SharingEmailOTPUtils = require("../utils/SharingEmailOTPUtils");
 
 async function fetchingUsers(req, res) {
     try {
@@ -86,9 +87,9 @@ async function otpVerification(req, res) {
 async function fillNameAndEmail(req, res) {
     try {
         const id = req.userID;
-        const { name, email } = req.body;
+        const { name, email, emailOTP } = req.body;
         let pincode = null;
-        const fillNameAndEmail = await PostUsers(id, name, email, pincode);
+        const fillNameAndEmail = await PostUsers(id, name, email, pincode, emailOTP);
 
         return res.status(fillNameAndEmail.status ? 200 : 404).json({
             status: fillNameAndEmail.status,
@@ -140,4 +141,26 @@ async function editUserDetailsController(req, res) {
     }
 }
 
-module.exports = { fetchingUsers, loggingInWithPhone, otpVerification, fillNameAndEmail, specificUserController, editUserDetailsController };
+
+async function sendingOTPEmail(req, res) {
+    try {
+        const { name, email } = req.body;
+        const userID = req.userID;
+
+        const requiredData = await SharingEmailOTPUtils(userID, name, email);
+
+        return res.status(requiredData.status ? 200 : 404).json({
+            status: requiredData.status,
+            message: requiredData.message,
+            otp: requiredData.otp
+        })
+    } catch (error) {
+        console.error(error.message);
+        return {
+            status: false,
+            message: error.message
+        };
+    }
+}
+
+module.exports = { fetchingUsers, loggingInWithPhone, otpVerification, fillNameAndEmail, specificUserController, editUserDetailsController, sendingOTPEmail };

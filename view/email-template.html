@@ -1,38 +1,4 @@
-const generateOTP = require('./generate-otp');
-const UserModel = require('../models/user.model');
-const OtpModel = require('../models/otp.model');
-const fetch = require('node-fetch');
-require('dotenv').config();
-
-async function SharingEmailOTPUtils(userID, username, email) {
-  try {
-    const user = await UserModel.findById(userID);
-    const phoneSearch = await OtpModel.findOne({ phoneNumber: user.phoneNumber });
-
-    if (!phoneSearch) {
-      // Handle the case where no record is found based on the phone number
-      return {
-        status: false,
-        message: 'Phone number not found for the user.'
-      };
-    }
-
-    const otp = generateOTP();
-    phoneSearch.emailOTP = otp;
-    await phoneSearch.save();
-
-    const url = 'https://api.brevo.com/v3/smtp/email';
-    const options = {
-      method: 'POST',
-      headers: {
-        accept: 'application/json',
-        'content-type': 'application/json',
-        'api-key': process.env.brevo_api_key
-      },
-      body: JSON.stringify({
-        sender: { name: 'Fouress Group', email: 'no-reply@fouressgroup.com' },
-        bcc: [{ email, name: username }],
-        htmlContent: `<!DOCTYPE html>
+<!DOCTYPE html>
         <html lang="en">
           <head>
             <meta charset="UTF-8" />
@@ -100,28 +66,3 @@ async function SharingEmailOTPUtils(userID, username, email) {
             </div>
           </body>
         </html>
-        `,
-        subject: 'OTP Request'
-      })
-    };
-
-    const response = await fetch(url, options);
-    const jsonResponse = await response.json();
-
-    console.log(jsonResponse);
-
-    return {
-      status: true,
-      message: 'Your OTP has been shared to the Email.',
-      otp: otp
-    };
-  } catch (error) {
-    console.error(error.message);
-    return {
-      status: false,
-      message: error.message
-    };
-  }
-}
-
-module.exports = SharingEmailOTPUtils;

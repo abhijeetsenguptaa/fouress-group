@@ -1,6 +1,7 @@
+const OtpModel = require("../../models/otp.model");
 const UserModel = require("../../models/user.model");
 
-async function PostUsers(id, name, email, pincode) {
+async function PostUsers(id, name, email, pincode, emailOtp) {
     try {
         // Find the user by id
         const user = await UserModel.findById(id);
@@ -13,19 +14,36 @@ async function PostUsers(id, name, email, pincode) {
             };
         }
 
-        // Update the user with the provided name and email
-        user.name = name;
-        user.email = email;
-        user.pincode = pincode;
+        const phoneNumber = user.phoneNumber;
 
-        // Save the updated user
-        await user.save();
+        // Find the OTP for the user's phone number
+        const emailOTPSetter = await OtpModel.findOne({ phoneNumber: phoneNumber });
 
-        // Return success
-        return {
-            status: true,
-            message: "User updated successfully"
-        };
+        // If no OTP is found or OTP doesn't match, return an error
+        if (emailOTPSetter.emailOTP == emailOtp) {
+            // Update the user with the provided name, email, and pincode
+            user.name = name;
+            user.email = email;
+            user.pincode = pincode;
+
+            // Save the updated user
+            await user.save();
+
+            // Delete the OTP from the OTP table
+            await OtpModel.deleteOne({ phoneNumber: phoneNumber });
+
+            // Return success
+            return {
+                status: true,
+                message: "User updated successfully"
+            };
+
+        } else {
+            return {
+                status: false,
+                message: "Invalid email OTP"
+            };
+        }
     } catch (error) {
         console.error(error.message);
         return {
