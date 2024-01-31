@@ -19,32 +19,31 @@ async function PostUsers(id, name, email, pincode, emailOtp) {
         // Find the OTP for the user's phone number
         const emailOTPSetter = await OtpModel.findOne({ phoneNumber: phoneNumber });
 
-        // If no OTP is found or OTP doesn't match, return an error
-        if (emailOTPSetter.emailOTP == emailOtp) {
-            // Update the user with the provided name, email, and pincode
-            user.name = name;
-            user.email = email;
-            user.isVerified = true;
-            user.pincode = pincode;
-
-            // Save the updated user
-            await user.save();
-
-            // Delete the OTP from the OTP table
-            await OtpModel.deleteOne({ phoneNumber: phoneNumber });
-
-            // Return success
-            return {
-                status: true,
-                message: "User updated successfully"
-            };
-
-        } else {
+        // If no OTP is found, or OTP doesn't match, return an error
+        if (!emailOTPSetter || emailOTPSetter.emailOTP !== emailOtp) {
             return {
                 status: false,
                 message: "Invalid email OTP"
             };
         }
+
+        // Update the user with the provided name, email, and pincode
+        user.name = name;
+        user.email = email;
+        user.isVerified = true;
+        user.pincode = pincode;
+
+        // Save the updated user
+        await user.save();
+
+        // Delete the OTP from the OTP table
+        await OtpModel.deleteOne({ phoneNumber: phoneNumber });
+
+        // Return success
+        return {
+            status: true,
+            message: "User updated successfully"
+        };
     } catch (error) {
         console.error(error.message);
         return {
