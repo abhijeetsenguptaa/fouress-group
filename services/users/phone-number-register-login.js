@@ -64,11 +64,11 @@ async function phoneNumberLoginService(phoneNumber, role) {
         //     .then(json => console.log(json))
         //     .catch(err => console.error('error:' + err));
         // Send OTP via Twilio
-        // await twilioClient.messages.create({
-        //     from: '+13237035099',
-        //     to: '+91'+ phoneNumber,
-        //     body: `Your OTP is: ${otp}`
-        // });
+        await twilioClient.messages.create({
+            from: '+13237035099',
+            to: '+91'+ phoneNumber,
+            body: `Your OTP is: ${otp}`
+        });
 
         // Hash OTP before saving to the database
         const hashOTP = await bcrypt.hash(otp, 10);
