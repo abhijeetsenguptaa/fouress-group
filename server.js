@@ -14,6 +14,7 @@ const cityRoute = require('./routers/city.routes');
 const CategoryModel = require('./models/category.model');
 const Sub_Category_Model = require('./models/sub_category.model');
 const enquireRoute = require('./routers/enquiry.routes');
+const notificationRouter = require('./routers/notification.routes');
 
 
 
@@ -62,6 +63,7 @@ app.use('/country', countryRoute);
 app.use('/state', stateRoute);
 app.use('/city', cityRoute);
 app.use('/enquiry', enquireRoute);
+app.use('/notifications', notificationRouter);
 
 app.listen(PORT, async () => {
     try {
