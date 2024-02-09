@@ -1,7 +1,7 @@
 const OtpModel = require("../../models/otp.model");
 const UserModel = require("../../models/user.model");
 
-async function PostUsers(id, name, email, pincode, emailOtp) {
+async function PostUsers(id, name, email, pincode, emailOtp, userToken) {
     try {
         // Find the user by id
         const user = await UserModel.findById(id);
@@ -32,7 +32,7 @@ async function PostUsers(id, name, email, pincode, emailOtp) {
         user.email = email;
         user.isVerified = true;
         user.pincode = pincode;
-
+        user.userToken = userToken;
         // Save the updated user
         await user.save();
 

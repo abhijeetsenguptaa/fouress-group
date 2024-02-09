@@ -1,6 +1,10 @@
 const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
+    userToken: {
+        type: String,
+        default: null
+    },
     name: {
         type: String,
         default: null
@@ -9,7 +13,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         default: null
     },
-    ceoName:{
+    ceoName: {
         type: String,
         default: null
     },
@@ -21,7 +25,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         default: null
     },
-    isVerified:{
+    isVerified: {
         type: Boolean,
         default: false
     },
@@ -58,15 +62,15 @@ const userSchema = new mongoose.Schema({
         type: String,
         default: null
     },
-    alternateEmail:{
+    alternateEmail: {
         type: String,
         default: null
     },
-    alternateEmailVerified:{
+    alternateEmailVerified: {
         type: Boolean,
         default: false
     },
-    alternateNumberVerified:{
+    alternateNumberVerified: {
         type: Boolean,
         default: false
     },
