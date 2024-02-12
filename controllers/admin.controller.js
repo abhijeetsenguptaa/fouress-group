@@ -1,3 +1,4 @@
+const GetAllTokenService = require("../services/admin/GetAllTokenService");
 const LoginAdminService = require("../services/admin/LoginAdminService");
 const RegisterAdminService = require("../services/admin/RegisterAdminService");
 
@@ -40,4 +41,23 @@ async function loggingAdminController(req, res) {
     }
 }
 
-module.exports = { registeringAdminController, loggingAdminController }
+
+async function GetAllUsersController(req, res) {
+    try {
+        const usersData = await GetAllTokenService();
+
+        return res.status(usersData.status ? 200 : 404).json({
+            status: usersData.status,
+            message: usersData.status ? usersData.message : "No Data Available",
+            data: usersData.status ? usersData.data : null
+        })
+    } catch (error) {
+        console.error(error.message);
+        return res.status(500).json({
+            status: false,
+            message: "Internal Server Error"
+        });
+    }
+}
+
+module.exports = { registeringAdminController, loggingAdminController, GetAllUsersController }
